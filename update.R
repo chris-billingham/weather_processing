@@ -3,8 +3,12 @@ library(magrittr)
 library(darksky)
 library(lubridate)
 
+postcode <- readRDS("data/postcode_letter.rds")
+
 # load in functions
 read_dates <- function(lat, lon, start, end) {
+  if(!is.character(start)){start <- as.character(start)}
+  if(!is.character(end)){end <- as.character(end)}
   obs <- seq(as.Date(start), as.Date(end), "day") %>%
     map(~get_forecast_for(lat, lon, units = "uk2", .x))
   return(obs)
