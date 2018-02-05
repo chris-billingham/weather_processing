@@ -7,8 +7,6 @@ postcode <- readRDS("data/postcode_letter.rds")
 
 # load in functions
 read_dates <- function(lat, lon, start, end) {
-  if(!is.character(start)){start <- as.character(start)}
-  if(!is.character(end)){end <- as.character(end)}
   obs <- seq(as.Date(start), as.Date(end), "day") %>%
     map(~get_forecast_for(lat, lon, units = "uk2", .x))
   return(obs)
@@ -39,6 +37,10 @@ range <- as.integer(as.Date(end_date) - as.Date(start_date))
 if(range > 8) {
   end_date <- start_date + days(7)
 }
+
+# annoying quirk
+start_date %<>% as.character()
+end_date %<>% as.character()
 
 # read in the new data
 update <- pmap(list(postcode$lat, postcode$lon, start_date, end_date), read_dates)
