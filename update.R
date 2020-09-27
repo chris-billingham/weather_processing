@@ -39,8 +39,8 @@ if(range > 8) {
 }
 
 # annoying quirk
-start_date %<>% as.character()
-end_date %<>% as.character()
+start_date <- as.character(start_date)
+end_date <- as.character(end_date)
 
 # read in the new data
 update <- pmap(list(postcode$lat, postcode$lon, start_date, end_date), read_dates)
