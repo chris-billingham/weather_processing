@@ -2,7 +2,6 @@ library(tidyverse)
 library(magrittr)
 library(darksky)
 library(lubridate)
-library(arrow)
 
 postcode <- readRDS("data/postcode_letter.rds")
 
@@ -21,8 +20,8 @@ iterate_postcode <- function(c, level, object) {
 }
 
 # read in the old data
-all_hourly <- read_parquet("data/all_hourly.parquet")
-all_daily <- read_parquet("data/all_daily.parquet")
+all_hourly <- readRDS("data/all_hourly.rds")
+all_daily <- readRDS("data/all_daily.rds")
 
 # work out the last date
 latest <- max(all_daily$time)
@@ -56,6 +55,6 @@ all_hourly <- bind_rows(all_hourly, new_hourly)
 all_daily <- bind_rows(all_daily, new_daily)
 
 # save off the new data
-write_parquet(all_hourly, "data/all_hourly.parquet")
-write_parquet(all_daily, "data/all_daily.parquet")
+saveRDS(all_hourly, "data/all_hourly.rds")
+saveRDS(all_daily, "data/all_daily.rds")
 
