@@ -3,6 +3,7 @@ suppressPackageStartupMessages({
   library(magrittr)
   library(darksky)
   library(lubridate)
+  library(glue)
 })
 print("01. reading in postcode data")
 postcode <- readRDS("data/postcode_letter.rds")
