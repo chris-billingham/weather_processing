@@ -5,7 +5,7 @@ suppressPackageStartupMessages({
   library(lubridate)
   library(glue)
 })
-print("01. reading in postcode data")
+print(glue("01. reading in postcode data"))
 postcode <- readRDS("data/postcode_letter.rds")
 
 # load in functions
@@ -23,7 +23,7 @@ iterate_postcode <- function(c, level, object) {
 }
 
 # read in the old data
-print("02. reading in old data")
+print(glue("02. reading in old data"))
 all_hourly <- readRDS("data/all_hourly.rds")
 all_daily <- readRDS("data/all_daily.rds")
 
@@ -52,7 +52,7 @@ update <- pmap(list(postcode$lat, postcode$lon, start_date, end_date), read_date
 names(update) <- postcode$letters
 
 # process the new data
-print("04. munging data into correct format")
+print(glur("04. munging data into correct format"))
 new_daily <- pmap_df(list(postcode$letters, "daily", "update"), iterate_postcode)
 new_hourly <- pmap_df(list(postcode$letters, "hourly", "update"), iterate_postcode)
 
@@ -61,8 +61,8 @@ all_hourly <- bind_rows(all_hourly, new_hourly)
 all_daily <- bind_rows(all_daily, new_daily)
 
 # save off the new data
-print("05. saving updated data to hdd")
+print(glue("05. saving updated data to hdd"))
 saveRDS(all_hourly, "data/all_hourly.rds")
 saveRDS(all_daily, "data/all_daily.rds")
 
-print("06. #fin")
+print(glue("06. #fin"))
