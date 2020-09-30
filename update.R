@@ -52,7 +52,7 @@ update <- pmap(list(postcode$lat, postcode$lon, start_date, end_date), read_date
 names(update) <- postcode$letters
 
 # process the new data
-print(glur("04. munging data into correct format"))
+print(glue("04. munging data into correct format"))
 new_daily <- pmap_df(list(postcode$letters, "daily", "update"), iterate_postcode)
 new_hourly <- pmap_df(list(postcode$letters, "hourly", "update"), iterate_postcode)
 
