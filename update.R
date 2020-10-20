@@ -4,9 +4,10 @@ suppressPackageStartupMessages({
   library(darksky)
   library(lubridate)
   library(glue)
+  library(here)
 })
 print(glue("01. reading in postcode data"))
-postcode <- readRDS("data/postcode_letter.rds")
+postcode <- readRDS(here("data/postcode_letter.rds"))
 
 # load in functions
 read_dates <- function(lat, lon, start, end) {
@@ -24,8 +25,8 @@ iterate_postcode <- function(c, level, object) {
 
 # read in the old data
 print(glue("02. reading in old data"))
-all_hourly <- readRDS("data/all_hourly.rds")
-all_daily <- readRDS("data/all_daily.rds")
+all_hourly <- readRDS(here("data/all_hourly.rds"))
+all_daily <- readRDS(here("data/all_daily.rds"))
 
 # work out the last date
 latest <- max(all_daily$time)
@@ -62,7 +63,7 @@ all_daily <- bind_rows(all_daily, new_daily)
 
 # save off the new data
 print(glue("05. saving updated data to hdd"))
-saveRDS(all_hourly, "data/all_hourly.rds")
-saveRDS(all_daily, "data/all_daily.rds")
+saveRDS(all_hourly, here("data/all_hourly.rds"))
+saveRDS(all_daily, here("data/all_daily.rds"))
 
 print(glue("06. #fin"))
