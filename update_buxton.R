@@ -2,11 +2,10 @@ library(tidyverse)
 library(darksky)
 library(here)
 library(lubridate)
+library(glue)
 
 lng <- -1.911
 lat <- 53.259
-
-big_long <- seq.Date(as.Date("1973-01-01"), as.Date("2021-02-17"), by = "day")
 
 # load in functions
 read_dates <- function(lat, lon, start, end) {
@@ -15,6 +14,7 @@ read_dates <- function(lat, lon, start, end) {
   return(obs)
 }
 
+print(glue("01. getting old data"))
 old_hourly <- readRDS(here("data/buxton_hourly.rds"))
 old_daily <- readRDS(here("data/buxton_daily.rds"))
 
@@ -24,6 +24,7 @@ end_date <- Sys.Date() - days(1)
 # work out how many days have we got
 range <- as.integer(as.Date(end_date) - as.Date(start_date))
 
+print(glue("02. truncating range to not use more than the free credits"))
 # if it's more than 8, which means we would have to pay, then reset end_date
 if(range > 800) {
   end_date <- start_date + days(800)
@@ -46,5 +47,6 @@ all_hourly <- bind_rows(old_hourly, new_hourly)
 all_daily <- bind_rows(old_daily, new_daily)
 
 # save the data off
+print(glue("04. saving data to hdd"))
 saveRDS(all_daily, here("data/buxton_daily.rds"))
 saveRDS(all_hourly, here("data/buxton_hourly.rds"))
