@@ -1,7 +1,5 @@
 # initial 5 year set up
-
 library(tidyverse)
-library(magrittr)
 library(darksky)
 
 # let's check if we've got what we need for post codes

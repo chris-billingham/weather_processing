@@ -1,9 +1,12 @@
-library(tidyverse)
-library(darksky)
-library(here)
-library(lubridate)
-library(glue)
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(darksky)
+  library(here)
+  library(lubridate)
+  library(glue)
+})
 
+# set the longitude and latitude for Buxton
 lng <- -1.911
 lat <- 53.259
 
@@ -18,6 +21,7 @@ print(glue("01. getting old data"))
 old_hourly <- readRDS(here("data/buxton_hourly.rds"))
 old_daily <- readRDS(here("data/buxton_daily.rds"))
 
+# set start date for next day and end date for today - 1
 start_date <- as.Date(max(old_hourly$time)) + days(1)
 end_date <- Sys.Date() - days(1)
 
@@ -25,7 +29,7 @@ end_date <- Sys.Date() - days(1)
 range <- as.integer(as.Date(end_date) - as.Date(start_date))
 
 print(glue("02. truncating range to not use more than the free credits"))
-# if it's more than 8, which means we would have to pay, then reset end_date
+# if it's more than 800, which means we would have to pay, then reset end_date
 if(range > 800) {
   end_date <- start_date + days(800)
 }

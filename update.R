@@ -1,6 +1,5 @@
 suppressPackageStartupMessages({
   library(tidyverse)
-  library(magrittr)
   library(darksky)
   library(lubridate)
   library(glue)
