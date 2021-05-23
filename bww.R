@@ -50,7 +50,7 @@ bww_final <- bww_table %>%
   # move the obs_datetime to the front because i like it
   relocate(obs_datetime, .before = wind_direction) %>%
   # convert everything except these three to numeric
-  mutate(across(!c("obs_datetime", "wind_direction", "rain"), as.numeric)) %>%
+  mutate(across(!c("obs_datetime", "wind_direction"), as.numeric)) %>%
   # and add in when the data is from :sunglasses:
   mutate(date_time_data = date_time_now)
 
