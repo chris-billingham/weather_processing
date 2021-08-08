@@ -1,9 +1,11 @@
-library(tidyverse)
-library(rvest)
-library(lubridate)
-library(janitor)
-library(here)
-library(logger)
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(rvest)
+  library(lubridate)
+  library(janitor)
+  library(here)
+  library(logger)
+})
 
 # read the latest buxton weather watch details
 url <- "https://buxtonweather.co.uk/details.htm"
@@ -13,7 +15,8 @@ page <- read_html(url)
 
 # grab table 
 log_info("Reading the latest Buxton Weather Watch Data")
-bww_table <- page %>% html_table() %>% 
+bww_table <- page %>% 
+  html_table() %>% 
   pluck(1)
 
 # find where the Last Updated bit is
