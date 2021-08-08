@@ -60,5 +60,11 @@ bww_old <- readRDS(here("data/buxton_weather_watch.rds"))
 # bind to the new
 bww_new <- bind_rows(bww_old, bww_final)
 
+# remove dupes
+bww_new_dupes <- bww_new %>%
+  group_by(obs_datetime) %>%
+  filter(date_time_data == min(date_time_data)) %>%
+  ungroup()
+
 # and save off
-saveRDS(bww_new, here("data/buxton_weather_watch.rds"))
+saveRDS(bww_new_dupes, here("data/buxton_weather_watch.rds"))
