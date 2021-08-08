@@ -3,6 +3,7 @@ library(rvest)
 library(lubridate)
 library(janitor)
 library(here)
+library(logger)
 
 # read the latest buxton weather watch details
 url <- "https://buxtonweather.co.uk/details.htm"
@@ -11,10 +12,12 @@ url <- "https://buxtonweather.co.uk/details.htm"
 page <- read_html(url)
 
 # grab table 
+log_info("Reading the latest Buxton Weather Watch Data")
 bww_table <- page %>% html_table() %>% 
   pluck(1)
 
 # find where the Last Updated bit is
+log_info("Process the Data")
 last_updated <- bww_table %>% 
   filter(str_detect(X1, "Last Updated")) %>% 
   select(X1) %>% as.character()
@@ -55,16 +58,19 @@ bww_final <- bww_table %>%
   mutate(date_time_data = date_time_now)
 
 # read in the old data
+log_info("Reading in the old data")
 bww_old <- readRDS(here("data/buxton_weather_watch.rds"))
 
 # bind to the new
 bww_new <- bind_rows(bww_old, bww_final)
 
 # remove dupes
+log_info("Removing duplicate entries")
 bww_new_dupes <- bww_new %>%
   group_by(obs_datetime) %>%
   filter(date_time_data == min(date_time_data)) %>%
   ungroup()
 
 # and save off
+log_info("Saving updated data to disk and #fin")
 saveRDS(bww_new_dupes, here("data/buxton_weather_watch.rds"))
