@@ -56,13 +56,26 @@ print(glue("04. munging data into correct format"))
 new_daily <- pmap_df(list(postcode$letters, "daily", "update"), iterate_postcode)
 new_hourly <- pmap_df(list(postcode$letters, "hourly", "update"), iterate_postcode)
 
+# connect to postgres
+print(glue("05. saving updated data to postgres"))
+con <- dbConnect(RPostgres::Postgres(), 
+                 dbname = Sys.getenv("POSTGRESQL_DB"),
+                 host = Sys.getenv("POSTGRESQL_HOST"),
+                 port = Sys.getenv("POSTGRESQL_PORT"),
+                 user = Sys.getenv("POSTGRESQL_USER"),
+                 password = Sys.getenv("POSTGRESQL_PASSWORD"))
+
+# update tables in postgres
+DBI::dbWriteTable(con, RPostgres::Id(schema = "weather", table = "all_daily"), new_daily, append = TRUE)
+DBI::dbWriteTable(con, RPostgres::Id(schema = "weather", table = "all_hourly"), new_hourly, append = TRUE)
+
 # and add it to the old data
 all_hourly <- bind_rows(all_hourly, new_hourly)
 all_daily <- bind_rows(all_daily, new_daily)
 
 # save off the new data
-print(glue("05. saving updated data to hdd"))
+print(glue("06. saving updated data to hdd"))
 saveRDS(all_hourly, here("data/all_hourly.rds"))
 saveRDS(all_daily, here("data/all_daily.rds"))
 
-print(glue("06. #fin"))
+print(glue("07. #fin"))
